@@ -203,7 +203,6 @@ def cmd(request):  ##命令行
     
         ids = request.POST.getlist('id')
         cmd = request.POST.get('cmd', None)
-        ids = ['63','64']
         idstring = ','.join(ids)
         
         if not cmd:
@@ -216,40 +215,13 @@ def cmd(request):  ##命令行
         x = {}
         x['data'] = []
         for  i in obj1:
-            print(i.ip,cmd)
             a = ssh(ip=i.ip,port=i.port,username=i.username,password=i.password,cmd=cmd)
-            print(a)
-            
+            history = History.objects.create(ip=i.ip, root=i.username, port=i.port, cmd=cmd, user=i.username)
             x['data'].append(a)
         x['status']=True
-        
+      
         print(x)
         return HttpResponse(json.dumps(x))
-            
-            
-        time.sleep(1000)
-        
-        
-        id = request.POST.get('id', None)
-        obj = Host.objects.filter(id=id).first()
-        ip = obj.ip
-        port = obj.port
-        username = obj.username
-        password = obj.password
-        user = request.user
-       
-
-        if not cmd:
-            error1 = "请输入命令"
-            ret = {"data": error1, "status": True}
-            return HttpResponse(json.dumps(ret))
-        history = History.objects.create(ip=ip, root=username, port=port, cmd=cmd, user=user)
-
-       
-        
-        
-
-
 
 
 @login_required(login_url="/login.html")

@@ -137,13 +137,11 @@
                     var obj = JSON.parse(data);
                       if (obj.status) {
                               con = "";
-                              $.each(obj,function (values) {
-
+                              $.each(obj,function (data,values) {
                                    $.each(values,function(index,value) {
                                        con +=" <pre   >主机: "+ value.ip+"\n"+"结果: "+ value.data+"</pre>"
-                         })
-
-                    });
+                                       })
+                                          });
                               $("#pre").html(con); //把内容入到这个div中即完成
                         } else {
                             $('#err').text(obj.error);
