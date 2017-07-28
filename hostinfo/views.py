@@ -5,6 +5,7 @@ from index.models import Business
 import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 import time
+import threading
 #
 # from  hostinfo.ansible_runner.runner import PlayBookRunner
 #
@@ -168,12 +169,67 @@ def yml(request):  ##yml
 
 
 
+
+def ssh(ip,port,username,password,cmd):
+    try:
+        ssh = paramiko.SSHClient()  # 创建ssh对象
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh.connect(hostname=ip, port=int(port), username=username, password=password, )
+        stdin, stdout, stderr = ssh.exec_command(cmd, timeout=30)
+        result = stdout.read()
+        result1 = result.decode()
+        error = stderr.read().decode('utf-8')
+        
+        if not error:
+            ret = {"ip":ip,"data":result1}
+        else:
+            error ="账号或密码错误,请修改保存再执行命令"
+            ret = {"ip": ip, "data": error}
+        ssh.close()
+        return ret
+    except Exception as e:
+        error2 = "账号或密码错误,请修改保存再执行命令"
+        ret = {"ip": ip, "data": error2}
+        return ret
+        
+        
+
 @login_required(login_url="/login.html")
 def cmd(request):  ##命令行
     if request.method == "GET":
         obj = Host.objects.filter(id__gt=0)
         return render(request, 'host/cmd.html', {"host_list": obj, })
     if request.method == 'POST':
+    
+        ids = request.POST.getlist('id')
+        cmd = request.POST.get('cmd', None)
+        ids = ['63','64']
+        idstring = ','.join(ids)
+        
+        if not cmd:
+            error1 = "请输入命令"
+            ret = {"error": error1, "status": False}
+            return HttpResponse(json.dumps(ret))
+        
+        obj1 = Host.objects.extra(where=['id IN (' + idstring + ')'])
+
+        x = {}
+        x['data'] = []
+        for  i in obj1:
+            print(i.ip,cmd)
+            a = ssh(ip=i.ip,port=i.port,username=i.username,password=i.password,cmd=cmd)
+            print(a)
+            
+            x['data'].append(a)
+        x['status']=True
+        
+        print(x)
+        return HttpResponse(json.dumps(x))
+            
+            
+        time.sleep(1000)
+        
+        
         id = request.POST.get('id', None)
         obj = Host.objects.filter(id=id).first()
         ip = obj.ip
@@ -181,7 +237,7 @@ def cmd(request):  ##命令行
         username = obj.username
         password = obj.password
         user = request.user
-        cmd = request.POST.get('cmd', None)
+       
 
         if not cmd:
             error1 = "请输入命令"
@@ -189,24 +245,9 @@ def cmd(request):  ##命令行
             return HttpResponse(json.dumps(ret))
         history = History.objects.create(ip=ip, root=username, port=port, cmd=cmd, user=user)
 
-        try:
-            ssh = paramiko.SSHClient()  # 创建ssh对象
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            ssh.connect(hostname=ip, port=int(port), username=username, password=password, )
-            stdin, stdout, stderr = ssh.exec_command(cmd, timeout=30)
-            result = stdout.read()
-            result1 = result.decode()
-            error = stderr.read().decode('utf-8')
-
-            if not error:
-                ret = {"data": result1, "status": True}
-            else:
-                ret = {"data": error, "status": True}
-            ssh.close()
-        except Exception as e:
-            error2 = "账号或密码错误,请修改保存再更新"
-            ret = {"data": error2, "status": True}
-        return HttpResponse(json.dumps(ret))
+       
+        
+        
 
 
 
@@ -273,7 +314,8 @@ def hostupdate(request):  ## 更新
     
     
 @login_required(login_url="/login.html")
-def hostall_del(request):
+@permission_required('hostinfo.del_host', login_url='/error.html')
+def hostall_del(request): ##批量删除
     ret = {'status': True, 'error': None, 'data': None}
     if  request.method == "POST":
              ids = request.POST.getlist('id')

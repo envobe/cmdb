@@ -199,13 +199,6 @@ h5 {
 .nav.navbar-top-links a {
   font-size: 14px;
 }
-.hljs {
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
-  color: #333;
-  background: #f8f8f8;
-}
 .navbar-form-custom .form-control {
   background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
   border: medium none;

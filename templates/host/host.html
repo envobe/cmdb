@@ -57,91 +57,95 @@
                         <div class="table-responsive">
 
                             {% if     perms.hostinfo.add_host %}
-                <button type="button" class="btn btn-primary  " data-toggle="modal" data-target="#myModal">
-                添加 {% endif %}
-            </button>
+                                <button type="button" class="btn btn-primary  " data-toggle="modal"
+                                        data-target="#myModal">
+                                添加 {% endif %}
+                            </button>
 
+                            {% if     perms.hostinfo.delete_host %}
+                                <a class="btn btn-danger" data-toggle="modal"
+                                   data-target="#myModa6">批量删除
+                                </a>
+                            {% endif %}
 
-                        <a  class="btn btn-danger"    data-toggle="modal"
-                                                    data-target="#myModa6"  >批量删除
-                                            </a>
-
-
-<form   id="del_form_hostall" class="form-horizontal  " >
-                            <table class="table table-striped table-bordered table-hover dataTables-example"
-                                   style="word-break:break-all; word-wrap:break-word;">
-                                <thead>
-                                <tr>
-                                    <th width="20"> <input  type="checkbox"    id="CheckedAll"></th>
-                                    <th>主机名</th>
-                                    <th>IP</th>
-                                    <th>版本</th>
-                                    <th>内存</th>
-                                    <th>硬盘</th>
-                                    <th>机房</th>
-                                    <th>变更 <span id="update_error" style="color:red;"></span>
-                                    </th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                {% for row  in host_list %}
-
-                                    <tr class="gradeX" nid="{{ row.id }}" jifang_id="{{ row.jifang_id }}"
-                                        hostname="{{ row.hostname }}" ip="{{ row.ip }}" osversion="{{ row.osversion }}"
-                                        memory="{{ row.memory }}" disk="{{ row.disk }}" sn="{{ row.sn }}"
-                                        beizhu="{{ row.beizhu }}" username="{{ row.username }}" port="{{ row.port }}"
-                                        cpu_core="{{ row.cpu_core }}" model_name="{{ row.model_name }}"
-                                        beizhu="{{ row.beizhu }}" >
-
-                                       <td > <input  type="checkbox"    value="{{ row.id }}"    name="id"   ></td>
-                                        <td>{{ row.hostname }}</td>
-                                        <td>{{ row.ip }}</td>
-                                        <td>{{ row.osversion }}</td>
-                                        <td>{{ row.memory }}</td>
-                                        <td>{{ row.disk }}</td>
-                                        <td noWrap>{{ row.jifang }}</td>
-                                        <td noWrap>
-                                            <button type="button" class="btn btn-primary  host_see" data-toggle="modal"
-                                                    data-target="#myModa4">查看
-                                            </button>
-                                            {% if     perms.hostinfo.change_host %}
-                                                <button type="button" class="btn btn-warning  host_change"
-                                                        data-toggle="modal" data-target="#myModa2">修改
-                                                </button> {% endif %}
-                                            {% if     perms.hostinfo.change_host %}
-                                                <a type="button" class="btn btn-warning  host_update"
-                                                >更新
-                                                </a> {% endif %}
-                                            {% if     perms.hostinfo.delete_host %}
-                                                <button type="button" class="btn btn-danger   host_del"
-                                                        data-toggle="modal"
-                                                        data-target="#myModa5">删除
-                                                </button>{% endif %}
-
-                                        </td>
-
+                            <form id="del_form_hostall" class="form-horizontal  ">
+                                <table class="table table-striped table-bordered table-hover dataTables-example"
+                                       style="word-break:break-all; word-wrap:break-word;">
+                                    <thead>
+                                    <tr>
+                                        <th width="20"><input type="checkbox" id="CheckedAll"></th>
+                                        <th>主机名</th>
+                                        <th>IP</th>
+                                        <th>版本</th>
+                                        <th>内存</th>
+                                        <th>硬盘</th>
+                                        <th>机房</th>
+                                        <th>变更 <span id="update_error" style="color:red;"></span>
+                                        </th>
                                     </tr>
+                                    </thead>
 
-                                {% endfor %}
+                                    <tbody>
+                                    {% for row  in host_list %}
 
-                                </tbody>
+                                        <tr class="gradeX" nid="{{ row.id }}" jifang_id="{{ row.jifang_id }}"
+                                            hostname="{{ row.hostname }}" ip="{{ row.ip }}"
+                                            osversion="{{ row.osversion }}"
+                                            memory="{{ row.memory }}" disk="{{ row.disk }}" sn="{{ row.sn }}"
+                                            beizhu="{{ row.beizhu }}" username="{{ row.username }}"
+                                            port="{{ row.port }}"
+                                            cpu_core="{{ row.cpu_core }}" model_name="{{ row.model_name }}"
+                                            beizhu="{{ row.beizhu }}">
+
+                                            <td><input type="checkbox" value="{{ row.id }}" name="id"></td>
+                                            <td>{{ row.hostname }}</td>
+                                            <td>{{ row.ip }}</td>
+                                            <td>{{ row.osversion }}</td>
+                                            <td>{{ row.memory }}</td>
+                                            <td>{{ row.disk }}</td>
+                                            <td noWrap>{{ row.jifang }}</td>
+                                            <td noWrap>
+                                                <button type="button" class="btn btn-primary  host_see"
+                                                        data-toggle="modal"
+                                                        data-target="#myModa4">查看
+                                                </button>
+                                                {% if     perms.hostinfo.change_host %}
+                                                    <button type="button" class="btn btn-warning  host_change"
+                                                            data-toggle="modal" data-target="#myModa2">修改
+                                                    </button> {% endif %}
+                                                {% if     perms.hostinfo.change_host %}
+                                                    <a type="button" class="btn btn-warning  host_update"
+                                                    >更新
+                                                    </a> {% endif %}
+                                                {% if     perms.hostinfo.delete_host %}
+                                                    <button type="button" class="btn btn-danger   host_del"
+                                                            data-toggle="modal"
+                                                            data-target="#myModa5">删除
+                                                    </button>{% endif %}
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                    </tbody>
 
 
-{#                                <tfoot>#}
-{#                                <tr>#}
-{#                                    <th>主机名</th>#}
-{#                                    <th>IP</th>#}
-{#                                    <th>版本</th>#}
-{#                                    <th>内存</th>#}
-{#                                    <th>硬盘</th>#}
-{#                                    <th>机房</th>#}
-{#                                    <th>变更</th>#}
-{#                                </tr>#}
-{#                                </tfoot>#}
-                            </table>
+                                    {#                                <tfoot>#}
+                                    {#                                <tr>#}
+                                    {#                                    <th>主机名</th>#}
+                                    {#                                    <th>IP</th>#}
+                                    {#                                    <th>版本</th>#}
+                                    {#                                    <th>内存</th>#}
+                                    {#                                    <th>硬盘</th>#}
+                                    {#                                    <th>机房</th>#}
+                                    {#                                    <th>变更</th>#}
+                                    {#                                </tr>#}
+                                    {#                                </tfoot>#}
+                                </table>
 
-     </form>
+                            </form>
                         </div>
 
                     </div>
@@ -510,7 +514,7 @@
     </div>
 
 
-        <div class="modal inmodal" id="myModa6" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal inmodal" id="myModa6" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content animated fadeIn">
                 <div class="modal-header">
@@ -529,7 +533,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-                        <a  class="btn btn-danger m-r-sm  hostall_del"> 批量删除</a>
+                        <a class="btn btn-danger m-r-sm  hostall_del"> 批量删除</a>
                     </div>
                 </form>
             </div>
@@ -549,18 +553,16 @@
                     url: "/host/hostall-del.html",
                     type: 'POST',
                     data: $('#del_form_hostall').serialize(),
-                     success: function (data) {
-                            var obj = JSON.parse(data);
-                            if (obj.status) {
-                                location.reload()
-                            }
+                    success: function (data) {
+                        var obj = JSON.parse(data);
+                        if (obj.status) {
+                            location.reload()
                         }
+                    }
 
                 })
             })
-    })
-
-
+        })
 
 
         $(function () {
@@ -707,7 +709,7 @@
                 $.ajax({
                     url: "/host/hostupdate",
                     type: 'POST',
-                    data: {'id': id,},
+                    data: {'id': id},
                     success: function (data) {
                         var obj = JSON.parse(data);
                         if (obj.status) {

@@ -1,8 +1,6 @@
 <!-- Mainly scripts -->
 <script src="/static/js/jquery-2.1.1.js"></script>
 <script src="/static/js/bootstrap.min.js"></script>
-
-
 <script src="/static/js/plugins/metisMenu/jquery.metisMenu.js"></script>
 <script src="/static/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 <script src="/static/js/plugins/jeditable/jquery.jeditable.js"></script>
@@ -14,17 +12,19 @@
 <!-- iCheck -->
 <script src="/static/js/plugins/iCheck/icheck.min.js"></script>
 
+<script type="text/JavaScript">
+    $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
+</script>
+
 
 <script>
     $(document).ready(function () {
         $('.i-checks').iCheck({
             checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
+            radioClass: 'iradio_square-green'
         });
     });
-</script>
 
-<script>
     $(document).ready(function () {
         $("#gaoji").hide();
         $("#ji").click(function () {
@@ -36,16 +36,14 @@
             $("#gaoji").show();
         });
     });
-</script>
-<script>
+
     $(document).ready(function () {
         $("#toubu").click(function () {
             $("body").toggleClass("mini-navbar");
             SmoothlyMenu();
         });
     });
-</script>
-<script>
+
     $(document).ready(function () {
         $(".collapse-links").click(function () {
             var ibox = $(this).closest('div.ibox');
@@ -60,13 +58,6 @@
             }, 50);
         });
     });
-</script>
-
-
-<script>
-
-
-
 
 
     $(document).ready(function () {
@@ -89,7 +80,7 @@
             },
             "order": [[ 1, 'asc' ]],
          　　         　　columnDefs:[{
-    　　　　'targets' : [0],    //除第六，第七两列外，都默认不排序
+    　　　　'targets' : [0],    //都默认不排序
     　　　　'orderable' : false
     　           　}],
 
@@ -118,17 +109,6 @@
 
     });
 
-
-</script>
-
-
-<script type="text/JavaScript">
-    $.ajaxSetup({headers: {"X-CSRFToken": '{{ csrf_token }}'}});
-</script>
-
-
-<script>
-
     $("#CheckedAll").click(function () {
                 if ($(this).is(":checked")) {
                     $("[name=id]:checkbox").prop("checked", true);
@@ -136,6 +116,15 @@
                     $("[name=id]:checkbox").prop("checked", false);
                 }
             });
+
+
+</script>
+
+
+
+
+
+<script>
 
 
     $(function () {
@@ -146,13 +135,24 @@
                 data: $('#cmd_from').serialize(),
                 success: function (data) {
                     var obj = JSON.parse(data);
-                    {#                  var  obj1 = obj.data.replace(/\n/g,"<br>");#}
-                    $('#ret').text(obj.data)
+                      if (obj.status) {
+                              con = "";
+                              $.each(obj,function (values) {
+
+                                   $.each(values,function(index,value) {
+                                       con +=" <pre   >主机: "+ value.ip+"\n"+"结果: "+ value.data+"</pre>"
+                         })
+
+                    });
+                              $("#pre").html(con); //把内容入到这个div中即完成
+                        } else {
+                            $('#err').text(obj.error);
+                        }
 
                 }
 
             })
-        })
+        });
 
 
         $('#yml').click(function () {

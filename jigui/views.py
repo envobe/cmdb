@@ -103,6 +103,7 @@ def show(request):  ## 展示
     return render(request, 'jigui/show.html',{"name":name,'jq':jq})
 
 @login_required(login_url="/login.html")
+@permission_required('jigui.delete_jiguiinfo',login_url='/error.html')
 def delete_jigui(request):
     ret = {'status': True, 'error': None, 'data': None}
     if  request.method == "POST":
