@@ -111,10 +111,12 @@
                                                 </button>
                                                 {% if     perms.hostinfo.change_host %}
                                                     <button type="button" class="btn btn-warning  host_change"
-                                                            data-toggle="modal" data-target="#myModa2">修改
+                                                            data-toggle="modal" data-target="#myModa2">
+{#                                                        <i class="fa fa-paste"></i>#}
+                                                        修改
                                                     </button> {% endif %}
                                                 {% if     perms.hostinfo.change_host %}
-                                                    <a type="button" class="btn btn-warning  host_update"
+                                                    <a type="button" class="btn btn-success  host_update"
                                                     >更新
                                                     </a> {% endif %}
                                                 {% if     perms.hostinfo.delete_host %}
@@ -132,17 +134,18 @@
                                     </tbody>
 
 
-                                    {#                                <tfoot>#}
-                                    {#                                <tr>#}
-                                    {#                                    <th>主机名</th>#}
-                                    {#                                    <th>IP</th>#}
-                                    {#                                    <th>版本</th>#}
-                                    {#                                    <th>内存</th>#}
-                                    {#                                    <th>硬盘</th>#}
-                                    {#                                    <th>机房</th>#}
-                                    {#                                    <th>变更</th>#}
-                                    {#                                </tr>#}
-                                    {#                                </tfoot>#}
+                                                                    <tfoot>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                    </tfoot>
                                 </table>
 
                             </form>

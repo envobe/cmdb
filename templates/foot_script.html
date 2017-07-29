@@ -63,6 +63,29 @@
     $(document).ready(function () {
         $('.dataTables-example').DataTable({
 
+            initComplete: function () {
+
+            var api = this.api();
+            api.columns().indexes().flatten().each( function ( i ) {
+                var column = api.column( i );
+                var select = $('<select><option value=""> </option> </select>')
+
+                    .appendTo( $(column.footer()).empty() )
+                    .on( 'change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex(
+                            $(this).val()
+                        );
+                        column
+                            .search( val ? '^'+val+'$' : '', true, false )
+                            .draw();
+                    } );
+                column.data().unique().sort().each( function ( d, j ) {
+                    select.append( '<option value="'+d+'">'+d+'</option>' )
+                } );
+            } );
+        },
+
+
             "oLanguage": {
                 "sLengthMenu": "每页显示 _MENU_ 条记录",
                 "sZeroRecords": "对不起，查询不到任何相关数据",
@@ -85,7 +108,8 @@
     　           　}],
 
 
-            dom: '<"html5buttons"B>lTfgitp',
+            dom: '<"html5buttons"B>lTfgitp,',
+
             buttons: [
                 {extend: 'copy'},
                 {extend: 'csv'},
@@ -103,9 +127,11 @@
                                 .css('font-size', 'inherit');
                     }
                 }
-            ]
-
+            ],
+             lengthMenu: [[10, 40, 100, -1], [10, 40, 100, "全部"]]
         });
+
+
 
     });
 
@@ -136,12 +162,16 @@
                 success: function (data) {
                     var obj = JSON.parse(data);
                       if (obj.status) {
+
+
                               con = "";
                               $.each(obj,function (data,values) {
                                    $.each(values,function(index,value) {
                                        con +=" <pre   >主机: "+ value.ip+"\n"+"结果: "+ value.data+"</pre>"
                                        })
                                           });
+
+
                               $("#pre").html(con); //把内容入到这个div中即完成
                         } else {
                             $('#err').text(obj.error);

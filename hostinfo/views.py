@@ -6,11 +6,11 @@ import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 import time
 import threading
-#
-# from  hostinfo.ansible_runner.runner import PlayBookRunner
-#
-# from hostinfo.ansible_runner.callback import CommandResultCallback
-# from  hostinfo.ansible_runner.runner import AdHocRunner
+
+from  hostinfo.ansible_runner.runner import PlayBookRunner
+
+from hostinfo.ansible_runner.callback import CommandResultCallback
+from  hostinfo.ansible_runner.runner import AdHocRunner
 
 
 @login_required(login_url="/login.html")
@@ -175,21 +175,18 @@ def ssh(ip,port,username,password,cmd):
         ssh = paramiko.SSHClient()  # 创建ssh对象
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         ssh.connect(hostname=ip, port=int(port), username=username, password=password, )
-        stdin, stdout, stderr = ssh.exec_command(cmd, timeout=30)
+        stdin, stdout, stderr = ssh.exec_command(cmd, timeout=10)
         result = stdout.read()
         result1 = result.decode()
         error = stderr.read().decode('utf-8')
         
         if not error:
             ret = {"ip":ip,"data":result1}
-        else:
-            error ="账号或密码错误,请修改保存再执行命令"
-            ret = {"ip": ip, "data": error}
         ssh.close()
         return ret
     except Exception as e:
-        error2 = "账号或密码错误,请修改保存再执行命令"
-        ret = {"ip": ip, "data": error2}
+        error = "账号或密码错误,请修改保存再执行命令"
+        ret = {"ip": ip, "data": error}
         return ret
         
         
@@ -213,12 +210,13 @@ def cmd(request):  ##命令行
         obj1 = Host.objects.extra(where=['id IN (' + idstring + ')'])
 
         x = {}
+        x['status'] = True
         x['data'] = []
         for  i in obj1:
             a = ssh(ip=i.ip,port=i.port,username=i.username,password=i.password,cmd=cmd)
             history = History.objects.create(ip=i.ip, root=i.username, port=i.port, cmd=cmd, user=i.username)
             x['data'].append(a)
-        x['status']=True
+        
       
         print(x)
         return HttpResponse(json.dumps(x))
