@@ -10,15 +10,18 @@ domo 登录：http://42.62.6.54:8001/index.html
 
 github链接：https://github.com/hequan2017/cmdb
 
+ pip install -r requirements.txt
 
 版本说明：
 环境 python3.6.1 django 1.11.3   需要安装的模块为 django-suit，ansible, paramiko
 服务器请yum按照  sshpass ，不然无法获取资产信息。
 
-
+![Alt text](https://github.com/hequan2017/cmdb/static/img/1.png)
 
 版本更新 1.6
 1 批量执行命令
+
+
 
 版本更新1.5.5
 1 版本小优化

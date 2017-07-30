@@ -202,7 +202,12 @@ def cmd(request):  ##命令行
         cmd = request.POST.get('cmd', None)
         idstring = ','.join(ids)
         
-        if not cmd:
+        
+        if not ids:
+            error1 = "请选择主机"
+            ret = {"error": error1, "status": False}
+            return HttpResponse(json.dumps(ret))
+        elif not cmd:
             error1 = "请输入命令"
             ret = {"error": error1, "status": False}
             return HttpResponse(json.dumps(ret))
@@ -216,9 +221,7 @@ def cmd(request):  ##命令行
             a = ssh(ip=i.ip,port=i.port,username=i.username,password=i.password,cmd=cmd)
             history = History.objects.create(ip=i.ip, root=i.username, port=i.port, cmd=cmd, user=i.username)
             x['data'].append(a)
-        
-      
-        print(x)
+
         return HttpResponse(json.dumps(x))
 
 

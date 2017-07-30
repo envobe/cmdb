@@ -550,6 +550,9 @@
 
     <script type="text/JavaScript">
 
+
+
+
         $(function () {
             $('.hostall_del').click(function () {
                 $.ajax({
@@ -565,10 +568,9 @@
 
                 })
             })
-        })
 
 
-        $(function () {
+
             $('#host_add').click(function () {
                 $.ajax({
                     url: "/host/hostadd",
@@ -593,7 +595,7 @@
                 $.ajax({
                     url: "/host/hostpassword",
                     type: 'POST',
-                    data: {'id': id,},
+                    data: {'id': id},
                     success: function (ret) {
                         $('#edit_form').find('input[name="password"]').val(ret);
                     }
@@ -604,7 +606,7 @@
                 var port = $(this).parent().parent().attr('port');
                 var hostname = $(this).parent().parent().attr('hostname');
                 var ip = $(this).parent().parent().attr('ip');
-                {#                var password = $(this).parent().parent().attr('password');#}
+
                 var osversion = $(this).parent().parent().attr('osversion');
                 var memory = $(this).parent().parent().attr('memory');
                 var disk = $(this).parent().parent().attr('disk');
