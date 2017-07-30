@@ -13,10 +13,11 @@ github链接：https://github.com/hequan2017/cmdb
 
 
 版本说明：
-环境 python3.6.1 django 1.11.3   需要安装的模块为 django-suit，ansible, paramiko  pip install -r requirements.txt
+环境 python3.6.1 django 1.11.3
 
-服务器请yum按照  sshpass ，不然无法获取资产信息。
+pip install -r requirements.txt          需要安装的模块为 django-suit，ansible, paramiko
 
+服务器请yum 安装  sshpass ，不然无法获取资产信息。
 
 
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/1.png)
