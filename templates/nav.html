@@ -29,12 +29,10 @@
                 <ul class="nav nav-second-level">
                     <li class="active">
                         <a href="{%   url    'jigui'   %}">详情</a></li>
-{#                        {% if     perms.jigui.add_jiguiinfo %}#}
-{#                        <li><a href="{%   url    'addx'   %}">添加</a></li>#}
-{#                        {% endif %}#}
                     <li><a href="{%   url    'show'   %}">展示</a></li>
                 </ul>
             </li>
+
             <li   class="active" >
                 <a href="#"><i class="fa fa-laptop"></i> <span class="nav-label">主机</span> <span
                         class="fa arrow"></span></a>
@@ -45,7 +43,15 @@
                     <li><a href="{% url   'history' %}">历史操作</a></li>
                 </ul>
             </li>
+{% ifequal  user.is_superuser  1 %}
 
+
+          <li class="active">
+                <a href="/admin/">后台<span
+                        class="fa arrow"> </span></a>
+
+            </li>
+        {% endifequal %}
 
         </ul>
 

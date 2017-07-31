@@ -1,6 +1,5 @@
 from django.db import models
 
-from  index.models import Business
 # Create your models here.
 
 class Host(models.Model):
@@ -9,8 +8,7 @@ class Host(models.Model):
     port = models.CharField(max_length=50, verbose_name='端口',null=True)
     username = models.CharField(max_length=50, verbose_name='登陆用户',null=True)
     password = models.CharField(max_length=50, verbose_name='密码',null=True)
-    jifang = models.ForeignKey(to=Business, to_field='id', null=True)
-
+    jifang = models.ForeignKey(to="Business", to_field='id', null=True)
 
     osversion = models.CharField(max_length=50,verbose_name='系统版本',null=True)
     memory = models.CharField(max_length=50,verbose_name='内存',null=True)
@@ -41,7 +39,7 @@ class History(models.Model):
     ctime = models.DateTimeField(auto_now_add=True, null=True, verbose_name='时间')
 
     class  Meta:
-        db_table ="history"
+        db_table ="History"
         verbose_name="历史命令"
         verbose_name_plural = '历史命令'
 
@@ -49,6 +47,17 @@ class History(models.Model):
     def __str__(self):
         return self.user
 
+class Business(models.Model):
+    caption = models.CharField(max_length=32, verbose_name='机房', null=True)
+    code = models.CharField(max_length=32, null=True, default="SA", verbose_name='产品线', )
+
+    class Meta:
+        db_table = "Business"
+        verbose_name = "机房组"
+        verbose_name_plural = '机房组'
+
+    def __str__(self):
+        return self.caption
 
 
 

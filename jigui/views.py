@@ -1,11 +1,12 @@
 from  django.shortcuts import render, redirect,HttpResponse
 from jigui import models
 from django.contrib.auth.decorators import permission_required,login_required
+
 import json
 @login_required(login_url="/login.html",)
 def jigui(request):  ##首页
     jigui = models.JiguiInfo.objects.filter(id__gt=0)
-    return render(request, 'jigui/jigui.html', {"jigui_list": jigui, })
+    return render(request, 'jigui/jigui.html', {"jigui_list": jigui,})
 
 
 @login_required(login_url="/login.html")
@@ -24,13 +25,13 @@ def add(request):  #添加
         yong1 = request.POST.get('yong')
         obj = models.JiguiInfo.objects.create(name=name1, jq=jq1, zy=zy1, ziy=ziy1, zs=zs1, zb=zb1, sh=sh1,xz=xz1,yong=yong1)
 
-        obj.d.add(*dx1)
+        obj.dx.add(*dx1)
 
         msg = "添加成功"
-        dx = models.dx.objects.all()
+        dx = models.Jiguidx.objects.all()
         return render(request, 'jigui/add.html', {'msg': msg ,"dx_list":dx})
     else:
-        dx = models.dx.objects.all()
+        dx = models.Jiguidx.objects.all()
         return render(request, 'jigui/add.html', {"dx_list":dx})
 
 
@@ -38,7 +39,7 @@ def add(request):  #添加
 def xiangxi(request, nid):  #详细页面
     jigui = models.JiguiInfo.objects.filter(id=nid).first()
     obj = models.JiguiInfo.objects.get(id=nid)
-    dx = obj.d.all()
+    dx = obj.dx.all()
     return render(request, 'jigui/xiangxi.html', {"xiangxi_info": jigui, "dx": dx,})
 
 
@@ -56,8 +57,8 @@ def jigui_edit(request, nid):   #编辑
     if request.method == "GET":
         obj1 = models.JiguiInfo.objects.filter(id=nid).first()   ##基本信息
         obj = models.JiguiInfo.objects.get(id=nid)
-        dx = obj.d.all()
-        dx1 = models.dx.objects.all()
+        dx = obj.dx.all()
+        dx1 = models.Jiguidx.objects.all()
         return render(request, 'jigui/jiguiedit.html', {'obj': obj1,"dx_list":dx,"dx_list1":dx1})
 
     elif request.method == "POST":
@@ -84,7 +85,7 @@ def jigui_edit(request, nid):   #编辑
         obj.yong=yong1
         obj.save()
         obj1 = models.JiguiInfo.objects.get(id=nid)
-        obj1.d.set(dx1)
+        obj1.dx.set(dx1)
 
         return redirect('/jigui/jigui.html')
     else:
@@ -104,7 +105,7 @@ def show(request):  ## 展示
 
 @login_required(login_url="/login.html")
 @permission_required('jigui.delete_jiguiinfo',login_url='/error.html')
-def delete_jigui(request):
+def delete_jigui(request):##批量删除
     ret = {'status': True, 'error': None, 'data': None}
     if  request.method == "POST":
              ids = request.POST.getlist('id')

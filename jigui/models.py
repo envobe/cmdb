@@ -12,7 +12,7 @@ class JiguiInfo(models.Model):
     sh = models.CharField(max_length=64,verbose_name='整包',null=True)
     xz = models.CharField(max_length=64,verbose_name='闲置',null=True)
 
-    d = models.ManyToManyField(to="dx",verbose_name='多选')
+    dx = models.ManyToManyField(to="Jiguidx",verbose_name='多选')
     yong = models.BooleanField(verbose_name='是否在用')
 
     ctime= models.DateTimeField(auto_now_add=True,null=True,verbose_name='创建时间')
@@ -28,11 +28,11 @@ class JiguiInfo(models.Model):
         return self.name
 
 
-class  dx(models.Model):
+class  Jiguidx(models.Model):
     xuan = models.CharField(max_length=64,verbose_name='多选选项')
 
     class  Meta:
-        db_table ="dx"
+        db_table ="Jiguidx"
         verbose_name="多选"
         verbose_name_plural = '多选'
     def __str__(self):

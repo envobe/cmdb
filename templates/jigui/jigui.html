@@ -80,23 +80,29 @@
                                         <th>总数</th>
                                         <th>在用</th>
                                         <th>自用</th>
-                                        <th>在售</th>
+                                        <th>状态</th>
+                                        <th>是否在用</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for row  in jigui_list %}
 
+                        {% for row  in jigui_list %}
                                         <tr class="gradeX">
+
                                             <td><input type="checkbox" value="{{ row.id }}" name="id"></td>
                                             <td><a href="/jigui/xiangxi-{{ row.id }}.html">{{ row.name }}</a></td>
                                             <td>{{ row.jq }}</td>
                                             <td>{{ row.zy }}</td>
                                             <td>{{ row.ziy }}</td>
-                                            <td>{{ row.zs }}</td>
+
+                                            <td> {{ row.dx.all  | cut:'>, <Jiguidx:' | slice:"20:-3"  }}     </td>
+
+                                            <td> {% ifequal  row.yong  1 %}   在用 {% else %}  没用  {% endifequal %}
+
+                                            </td>
 
                                         </tr>
-
-                                    {% endfor %}
+                                         {% endfor %}
 
                                     </tbody>
 

@@ -19,7 +19,6 @@ pip install -r requirements.txt          需要安装的模块为 django-suit，
 
 服务器请yum 安装  sshpass ，不然无法获取资产信息。
 
-
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/1.png)
 
 版本更新 1.6
