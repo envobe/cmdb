@@ -3,9 +3,8 @@ from hostinfo.models import Host, History,Business
 import json
 import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
-import time
-import threading
-#
+
+
 # from  hostinfo.ansible_runner.runner import PlayBookRunner
 #
 # from hostinfo.ansible_runner.callback import CommandResultCallback
@@ -47,7 +46,10 @@ def host_add(request):  ##添加
                 data = result['contacted']['host'][0]['ansible_facts']
                 hostname = data['ansible_fqdn']
                 osversion = data['ansible_distribution'] + data['ansible_distribution_version']
-                disk = data['ansible_devices']["vda"]['size']
+                disk = str(sum([int(data["ansible_devices"][i]["sectors"]) * \
+                                int(data["ansible_devices"][i]["sectorsize"]) / 1024 / 1024 / 1024 \
+                                for i in data["ansible_devices"] if i[0:2] in ("vd", "ss", "sd")])) + str(" GB")
+                
                 memory = '{}MB'.format(data['ansible_memtotal_mb'])
                 sn = data['ansible_product_serial']
                 model_name = data['ansible_product_name']
@@ -262,7 +264,11 @@ def hostupdate(request):  ## 更新
             data = result['contacted']['host'][0]['ansible_facts']
             hostname = data['ansible_fqdn']
             osversion = data['ansible_distribution'] + data['ansible_distribution_version']
-            disk = data['ansible_devices']["vda"]['size']
+            disk = str(sum([int(data["ansible_devices"][i]["sectors"]) * \
+                        int(data["ansible_devices"][i]["sectorsize"]) / 1024 / 1024 / 1024 \
+                        for i in data["ansible_devices"] if i[0:2] in ("vd", "ss", "sd")]))+str(" GB")
+            
+            
             memory = '{}MB'.format(data['ansible_memtotal_mb'])
             sn = data['ansible_product_serial']
             model_name = data['ansible_product_name']

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="49e2c61d-355b-4a2b-979b-cd50bbb39d66" name="cmdb" url="http://42.62.6.54:8001">
+        <fileTransfer host="42.62.6.54" port="22" rootFolder="/root/cmdb" accessType="SFTP">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

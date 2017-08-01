@@ -8,12 +8,11 @@ class Host(models.Model):
     port = models.CharField(max_length=50, verbose_name='端口',null=True)
     username = models.CharField(max_length=50, verbose_name='登陆用户',null=True)
     password = models.CharField(max_length=50, verbose_name='密码',null=True)
-    jifang = models.ForeignKey(to="Business", to_field='id', null=True)
+    jifang = models.ForeignKey(to="Business", to_field='id', null=True,verbose_name='机房')
 
     osversion = models.CharField(max_length=50,verbose_name='系统版本',null=True)
     memory = models.CharField(max_length=50,verbose_name='内存',null=True)
     disk = models.CharField(max_length=50,verbose_name='硬盘',null=True)
-
     sn = models.CharField(max_length=50, verbose_name='SN', null=True)
     model_name = models.CharField(max_length=50, verbose_name='型号', null=True)
     cpu_core = models.CharField(max_length=50, verbose_name='CPU', null=True)
