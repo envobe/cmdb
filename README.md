@@ -7,23 +7,33 @@ domo 登录：http://42.62.6.54:8001/index.html
 
 后台 登陆：http://42.62.6.54:8001/admin            可以登录后台修改hequan 的权限
 
-
 github链接：https://github.com/hequan2017/cmdb
 
-
-
 版本说明：
-环境 python3.6.1 django 1.11.3
+环境 python3.6.1
+pip install -r requirements.txt
 
-pip install -r requirements.txt          需要安装的模块为 django-suit，ansible, paramiko
+需要安装的模块为
+django==1.11.3
+ansible==2.3.1.0
+paramiko==2.2.1
+django-suit==2.0a1
 
 服务器请yum 安装  sshpass ，不然无法获取资产信息。
 
+直接python manage.py  runserver 运行
+
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/1.png)
+
+
+
+版本更新 1.7
+1 版本小优化
+2 更新后台admin模块 为suit v2版本
+![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/2.png)
 
 版本更新 1.6
 1 批量执行命令
-
 
 版本更新1.5.5
 1 版本小优化
