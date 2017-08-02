@@ -1,0 +1,158 @@
+
+{% extends "base.html" %}
+
+{% block header-css %}
+    {% endblock %}
+
+
+
+
+{% block page-content-title %} 主机性能展示 {% endblock %}
+
+{% block page-nav-tab %}
+ <ol class="breadcrumb">
+                    <li>
+                        <a href="../index.html">首页</a>
+                    </li>
+                    <li>
+                        <a>详情</a>
+                    </li>
+                    <li class="active">
+                        <strong> 主机性能展示</strong></li>
+</ol>
+{% endblock %}
+
+
+
+{% block page-content %}
+        <div class="wrapper wrapper-content animated fadeInRight chart"    >
+            <div class="row"  >
+                <div class="col-sm-6">
+                    <div class="ibox float-e-margins">
+
+                    <div class="ibox-title">
+                            <h5>CPU</h5>
+                              <div class="ibox-tools">
+                                <a class="collapse-links">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">配置选项 1</a>
+                                    </li>
+                                    <li><a href="#">配置选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    <div class="ibox-content" >
+                        <div   style="height:300px;" id="cpu"></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+                <div class="col-sm-6">
+                    <div class="ibox float-e-margins">
+
+                    <div class="ibox-title">
+                            <h5>内存</h5>
+                              <div class="ibox-tools">
+                                <a class="collapse-links">
+                                    <i class="fa fa-chevron-up"></i>
+                                </a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    <i class="fa fa-wrench"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-user">
+                                    <li><a href="#">配置选项 1</a>
+                                    </li>
+                                    <li><a href="#">配置选项 2</a>
+                                    </li>
+                                </ul>
+                                <a class="close-link">
+                                    <i class="fa fa-times"></i>
+                                </a>
+                            </div>
+
+                        </div>
+
+                    <div class="ibox-content" >
+                        <div   style="height:300px;" id="mem"></div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        </div>
+
+
+{% endblock %}
+
+{% block  js %}
+
+    <script src="/static/js/echarts.min.js"></script>
+
+    <script>
+    $(function () {
+          var myChart1 = echarts.init(document.getElementById('cpu'));
+            option1 = {
+                tooltip : {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                series: [
+                    {
+                        name: 'cpu',
+                        type: 'gauge',
+                        detail: {formatter:'{value}%'},
+                        data: [{value: {{   cpu  }}, name: '使用率'}]
+                    }
+                ]
+            };
+
+            setInterval(function () {
+                myChart1.setOption(option1, true);
+            },2000);
+
+        window.onresize = function () {
+            myChart.resize();
+        }
+
+
+          var myChart2 = echarts.init(document.getElementById('mem'));
+            option2 = {
+                tooltip : {
+                    formatter: "{a} <br/>{b} : {c}%"
+                },
+                series: [
+                    {
+                        name: 'cpu',
+                        type: 'gauge',
+                        detail: {formatter:'{value}%'},
+                        data: [{value: {{ mem }}, name: '使用率'}]
+                    }
+                ]
+            };
+
+            setInterval(function () {
+                myChart2.setOption(option2, true);
+            },2000);
+
+        window.onresize = function () {
+            myChart2.resize();
+        }
+
+    });
+</script>
+{% endblock %}
+

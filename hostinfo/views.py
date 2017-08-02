@@ -5,10 +5,10 @@ import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
 
-from  hostinfo.ansible_runner.runner import PlayBookRunner
-
-from hostinfo.ansible_runner.callback import CommandResultCallback
-from  hostinfo.ansible_runner.runner import AdHocRunner
+# from  hostinfo.ansible_runner.runner import PlayBookRunner
+#
+# from hostinfo.ansible_runner.callback import CommandResultCallback
+# from  hostinfo.ansible_runner.runner import AdHocRunner
 
 
 @login_required(login_url="/login.html")
@@ -301,3 +301,19 @@ def hostall_del(request): ##批量删除
              Host.objects.extra(where=['id IN (' + idstring + ')']).delete()
 
     return HttpResponse(json.dumps(ret))
+
+def host_show(request,nid):
+    i = Host.objects.filter(id=nid).first()
+    print(i.ip)
+    import time
+
+    cpu1 = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" top -bn 1 -i -c | grep Cpu   ")
+    cpu = float(cpu1['data'][8:14])
+
+    total = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" free | grep  Mem:  ")
+    list = total['data'].split(" ")
+    while ''  in list:
+        list.remove('')
+    mem = float('%.2f' %(int(list[2])/int(list[1])))
+    print(list[2],list[1])
+    return render(request, 'host/show.html',{'cpu':cpu,'mem':mem})
