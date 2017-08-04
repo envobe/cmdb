@@ -19,9 +19,6 @@ TOOL_RUN_TYPE = (
 #         verbose_name_plural = verbose_name
 
 
-
-
-
 class ToolsScript(models.Model):
     name = models.CharField(max_length=255, verbose_name='工具名称')
     tool_script = models.TextField(verbose_name='脚本')

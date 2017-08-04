@@ -137,18 +137,6 @@ CACHES = {
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
-# SUIT_CONFIG = {  # suit页面配置
-#     'ADMIN_NAME': 'cmdbx后台管理系统',  # 登录界面提示
-#     'LIST_PER_PAGE': 20,
-#     'MENU': (
-#         'sites',
-#         {'app': 'index', 'label': u'主页'},
-#         {'app': 'jigui', 'label': u'机柜'},
-#         {'app': 'hostinfo', 'label': u'服务器'},
-#         {'app': 'auth', 'label': u'系统用户'},
-#         # 每一个字典表示左侧菜单的一栏
-#         # {'label': u'SQL管理', 'app': 'web_sso', 'models': ('web_sso.Sql', 'web_sso.PreSql', 'web_sso.Direction')},  # 可以是多个字典
-#     ),
-# }
+
 
 LOGIN_URL = '/login.html'
