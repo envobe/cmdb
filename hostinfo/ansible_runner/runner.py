@@ -273,25 +273,25 @@ class AdHocRunner(object):
 
 
 def test_run():
-    assets = [
-        {
-                "hostname": "192.168.50.210",
-                "ip": "192.168.50.210",
-                "port": 22,
-                "username": "root",
-                "password": "XXXXXXX",
-        },
-    ]
+    # assets = [
+    #     {
+    #             "hostname": "192.168.50.210",
+    #             "ip": "192.168.50.210",
+    #             "port": 22,
+    #             "username": "root",
+    #             "password": "XXXXXXX",
+    #     },
+    # ]
     # task_tuple = (('shell', 'ls'),)
     # hoc = AdHocRunner(hosts=assets)
     # hoc.results_callback = CommandResultCallback()
     # ret = hoc.run(task_tuple)
     # print(ret)
 
-    task_tuple = (('setup',''),)
-    runner = AdHocRunner(assets)
-    result = runner.run(task_tuple=task_tuple,pattern='all', task_name='Ansible Ad-hoc')
-    print(result)
+    # task_tuple = (('setup',''),)
+    # runner = AdHocRunner(assets)
+    # result = runner.run(task_tuple=task_tuple,pattern='all', task_name='Ansible Ad-hoc')
+    # print(result)
 
     #play = PlayBookRunner(assets, playbook_path='/tmp/some.yml')
     """

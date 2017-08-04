@@ -5,8 +5,6 @@ import json
 from django.contrib.auth.decorators import permission_required, login_required
 
 
-
-
 from  hostinfo.ansible_runner.runner import AdHocRunner,CommandResultCallback
 
 @login_required(login_url="/login.html", )
@@ -85,42 +83,76 @@ def shdelall(request):##批量删除
 
 
 @login_required(login_url="/login.html")
-def shell(request):  ##执行脚本
-    ret = {'status': True, 'error': None, 'data': None}
-    if request.method == 'GET':
-            host_id = request.POST.get('hostid', None)
-            sh_id = request.POST.get('sshid', None)
-        
-            host = Host.objects.filter(id=1)
-            sh = ToolsScript.objects.filter(id=1)
+def shell(request,nid):  ##执行脚本
+    if  request.method=="GET":
+        obj = Host.objects.filter(id__gt=0)
+        sh = ToolsScript.objects.filter(id=nid)
+      
+        return  render(request,'sh/shell.html',{"host_list": obj,"sh":sh })
+
+
+@login_required(login_url="/login.html")
+def shell_sh(request):  ##执行脚本
+    ret = {'status': True, 'data': None}
+    
+    if request.method == 'POST':
+        try:
+            host_ids = request.POST.getlist('id', None)
+            sh_id = request.POST.get('shid', None)
+
+            if not host_ids:
+                error1 = "请选择主机"
+                ret = {"error": error1, "status": False}
+                return HttpResponse(json.dumps(ret))
+                
+            print(host_ids,sh_id)
+            idstring = ','.join(host_ids)
             
-            
+            host = Host.objects.extra(where=['id IN (' + idstring + ')'])
+            sh = ToolsScript.objects.filter(id=sh_id)
             
             for s in sh:
-                with  open('sh/shell/{}.sh'.format(s.id),'w+') as f:
+                with  open('sh/shell/{}.sh'.format(s.id), 'w+') as f:
                     f.write(s.tool_script)
                     a = 'sh/shell/{}.sh'.format(s.id)
             
+            data1 = []
+            
             for h in host:
-                assets = [
-                    {
-                        "hostname": '1',
-                        "ip": h.ip,
-                        "port": h.port,
-                        "username": h.username,
-                        "password": h.password,
-                    },
-                ]
+                try:
+                    data2={}
+                    assets = [
+                        {
+                            "hostname": h.hostname,
+                            "ip": h.ip,
+                            "port": h.port,
+                            "username": h.username,
+                            "password": h.password,
+                        },
+                    ]
+                    
+                    print('11111111111111',h.password)
+                    task_tuple = (('script', a),)
+                    hoc = AdHocRunner(hosts=assets)
+                    hoc.results_callback = CommandResultCallback()
+                    r = hoc.run(task_tuple)
             
+                    data2['ip']=h.ip
+                    data2['data']=r['contacted'][h.hostname]['stdout']
+                    data1.append(data2)
+                except  Exception as  e:
+                    data2['ip'] = h.ip
+                    data2['data'] ="账号密码不对，请修改"
+                    data1.append(data2)
+            print(data1)
+            ret['data']=data1
             
-                task_tuple = (('script', a),)
-                hoc = AdHocRunner(hosts=assets)
-                hoc.results_callback = CommandResultCallback()
-                ret = hoc.run(task_tuple)
-                print(ret)
-                data = ret['contacted']['1']['stdout']
-                print(data)
-                return  HttpResponse(json(ret))
+            print(ret)
             
-            import time
-            time.sleep(10000)
+            return HttpResponse(json.dumps(ret))
+        except Exception as e:
+            ret['status'] = False
+            ret['error'] = '账号或密码错误'
+            return HttpResponse(json.dumps(ret))
+
+        

@@ -5,8 +5,7 @@
       <paths name="cmdb">
         <serverdata>
           <mappings>
-            <mapping local="E:/mail" web="/" />
-            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/root/" />
           </mappings>
         </serverdata>
       </paths>

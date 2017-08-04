@@ -4,11 +4,11 @@ import json
 import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
-#
-# from  hostinfo.ansible_runner.runner import PlayBookRunner
-#
-# from hostinfo.ansible_runner.callback import CommandResultCallback
-# from  hostinfo.ansible_runner.runner import AdHocRunner
+
+from  hostinfo.ansible_runner.runner import PlayBookRunner
+
+from hostinfo.ansible_runner.callback import CommandResultCallback
+from  hostinfo.ansible_runner.runner import AdHocRunner
 
 
 @login_required(login_url="/login.html")
@@ -222,7 +222,6 @@ def cmd(request):  ##命令行
             a = ssh(ip=i.ip,port=i.port,username=i.username,password=i.password,cmd=cmd)
             history = History.objects.create(ip=i.ip, root=i.username, port=i.port, cmd=cmd, user=i.username)
             x['data'].append(a)
-
         return HttpResponse(json.dumps(x))
 
 
