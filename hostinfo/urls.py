@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
 from django.conf.urls import url
 from hostinfo.views import host, cmd, host_add, host_change, host_del,yml,history,hostupdate,host_change_password,hostall_del,host_show
 urlpatterns = [

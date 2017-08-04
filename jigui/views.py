@@ -12,8 +12,6 @@ def jigui(request):  ##首页
     for i in jigui[0:3]:
         print(i.zs)
     
-    
-    
     return render(request, 'jigui/jigui.html', {"jigui_list": jigui,})
 
 

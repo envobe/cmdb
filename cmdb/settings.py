@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'jigui.apps.JiguiConfig',
     'index',
     'hostinfo',
+    'sh'
 ]
 
 MIDDLEWARE = [

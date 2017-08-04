@@ -4,7 +4,7 @@ import json
 import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
-
+#
 # from  hostinfo.ansible_runner.runner import PlayBookRunner
 #
 # from hostinfo.ansible_runner.callback import CommandResultCallback
@@ -183,8 +183,8 @@ def ssh(ip,port,username,password,cmd):
         
         if not error:
             ret = {"ip":ip,"data":result1}
-        ssh.close()
-        return ret
+            ssh.close()
+            return ret
     except Exception as e:
         error = "账号或密码错误,请修改保存再执行命令"
         ret = {"ip": ip, "data": error}
@@ -301,6 +301,7 @@ def hostall_del(request): ##批量删除
              Host.objects.extra(where=['id IN (' + idstring + ')']).delete()
 
     return HttpResponse(json.dumps(ret))
+
 
 def host_show(request,nid):
     i = Host.objects.filter(id=nid).first()

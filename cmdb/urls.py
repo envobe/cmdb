@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^logout.html$', logout),
     url(r'^error.html$', error),
     url(r'^host/', include('hostinfo.urls')),
+    url(r'^sh/', include('sh.urls')),
 ]
