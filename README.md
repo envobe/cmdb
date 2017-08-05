@@ -26,6 +26,9 @@ django-suit==2.0a1
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/1.png)
 
 
+版本更新1.7.5
+1 批量执行shell/yml
+
 
 版本更新 1.7
 1 版本小优化
