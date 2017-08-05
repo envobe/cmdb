@@ -5,10 +5,9 @@ import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
 
-from  hostinfo.ansible_runner.runner import PlayBookRunner
-
-from hostinfo.ansible_runner.callback import CommandResultCallback
-from  hostinfo.ansible_runner.runner import AdHocRunner
+# from  hostinfo.ansible_runner.runner import PlayBookRunner
+# from hostinfo.ansible_runner.callback import CommandResultCallback
+# from  hostinfo.ansible_runner.runner import AdHocRunner
 
 
 @login_required(login_url="/login.html")
@@ -126,49 +125,6 @@ def host_del(request):  ##删除
             ret['status'] = False
             ret['error'] = '删除请求错误'
     return HttpResponse(json.dumps(ret))
-
-
-@login_required(login_url="/login.html")
-def yml(request):  ##yml
-    ret = {'status': True, 'error': None, 'data': None}
-    if request.method == "GET":
-        obj = Host.objects.filter(id__gt=0)
-        return render(request, 'host/yml.html', {"host_list": obj, })
-
-    if request.method == 'POST':
-        try:
-            id = request.POST.get('id', None)
-            obj = Host.objects.filter(id=id).first()
-            ip = obj.ip
-            port = obj.port
-            username = obj.username
-            password = obj.password
-            user = request.user
-
-            cmd = "yml"
-
-            history = History.objects.create(ip=ip, root=username, port=port, cmd=cmd, user=user)
-            assets = [
-                {
-                    "hostname": 'host',
-                    "ip": ip,
-                    "port": port,
-                    "username": username,
-                    "password": password,
-                },
-            ]
-
-            play = PlayBookRunner(assets, playbook_path='hostinfo/ansible_runner/cmd.yml')
-            a = play.run()
-            b = a['plays'][0]['tasks'][0]['hosts']['host']['_ansible_verbose_override']
-            ret = {"data": b, "status": True}
-        except Exception as e:
-            error = "账号或密码错误,请修改保存再执行yml"
-            ret = {"data": error, "status": True}
-        return HttpResponse(json.dumps(ret))
-
-
-
 
 
 def ssh(ip,port,username,password,cmd):
@@ -301,11 +257,10 @@ def hostall_del(request): ##批量删除
 
     return HttpResponse(json.dumps(ret))
 
+@login_required(login_url="/login.html")
 
 def host_show(request,nid):
     i = Host.objects.filter(id=nid).first()
-    print(i.ip)
-    import time
 
     cpu1 = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" top -bn 1 -i -c | grep Cpu   ")
     cpu = float(cpu1['data'][8:14])
@@ -315,5 +270,4 @@ def host_show(request,nid):
     while ''  in list:
         list.remove('')
     mem = float('%.2f' %(int(list[2])/int(list[1])))
-    print(list[2],list[1])
     return render(request, 'host/show.html',{'cpu':cpu,'mem':mem})

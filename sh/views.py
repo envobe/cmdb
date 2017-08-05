@@ -1,11 +1,11 @@
 from  django.shortcuts import render, redirect, HttpResponse
 from sh.models import ToolsScript
-from hostinfo.models import Host
+from hostinfo.models import Host,History
 import json
 from django.contrib.auth.decorators import permission_required, login_required
 
 
-from  hostinfo.ansible_runner.runner import AdHocRunner,CommandResultCallback
+# from  hostinfo.ansible_runner.runner import AdHocRunner,CommandResultCallback,PlayBookRunner
 
 @login_required(login_url="/login.html", )
 def sh(request):  ##首页
@@ -99,60 +99,74 @@ def shell_sh(request):  ##执行脚本
         try:
             host_ids = request.POST.getlist('id', None)
             sh_id = request.POST.get('shid', None)
+            user = request.user
 
             if not host_ids:
                 error1 = "请选择主机"
                 ret = {"error": error1, "status": False}
                 return HttpResponse(json.dumps(ret))
                 
-            print(host_ids,sh_id)
             idstring = ','.join(host_ids)
             
             host = Host.objects.extra(where=['id IN (' + idstring + ')'])
             sh = ToolsScript.objects.filter(id=sh_id)
             
             for s in sh:
-                with  open('sh/shell/{}.sh'.format(s.id), 'w+') as f:
-                    f.write(s.tool_script)
-                    a = 'sh/shell/{}.sh'.format(s.id)
+                if s.tool_run_type == 'shell':
+                    with  open('sh/shell/{}.sh'.format(s.id), 'w+') as f:
+                        f.write(s.tool_script)
+                        a = 'sh/shell/{}.sh'.format(s.id)
+                elif s.tool_run_type ==  'yml':
+                    with  open('sh/yml/{}.yml'.format(s.id), 'w+') as f:
+                        f.write(s.tool_script)
+                        a = 'sh/yml/{}.yml'.format(s.id)
+                else:
+                        ret['status'] = False
+                        ret['error'] = '脚本类型错误,只能是shell  或  yml'
+                        return HttpResponse(json.dumps(ret))
+        
+                data1 = []
+                for h in host:
+                    try:
+                        data2={}
+                        assets = [
+                            {
+                                "hostname": h.hostname,
+                                "ip": h.ip,
+                                "port": h.port,
+                                "username": h.username,
+                                "password": h.password,
+                            },
+                        ]
+
+                        history = History.objects.create(ip=h.ip, root=h.username, port=h.port, cmd=s.name, user=user)
+                        if s.tool_run_type == 'shell':
+                            task_tuple = (('script', a),)
+                            hoc = AdHocRunner(hosts=assets)
+                            hoc.results_callback = CommandResultCallback()
+                            r = hoc.run(task_tuple)
+                            data2['ip']=h.ip
+                            data2['data']=r['contacted'][h.hostname]['stdout']
+                            data1.append(data2)
+                        elif s.tool_run_type ==  'yml':
+                            play = PlayBookRunner(assets, playbook_path='sh/yml/2.yml')
+                            b = play.run()
+                            data2['ip'] = h.ip
+                            data2['data'] = b['plays'][0]['tasks'][1]['hosts'][h.hostname]['stdout']
+                            data1.append(data2)
+                        else:
+                            data2['ip'] = "脚本类型错误"
+                            data2['data'] = "脚本类型错误"
+                    except  Exception as  e:
+                        data2['ip'] = h.ip
+                        data2['data'] ="账号密码不对，请修改"
+                        data1.append(data2)
+                ret['data'] = data1
+                return HttpResponse(json.dumps(ret))
             
-            data1 = []
-            
-            for h in host:
-                try:
-                    data2={}
-                    assets = [
-                        {
-                            "hostname": h.hostname,
-                            "ip": h.ip,
-                            "port": h.port,
-                            "username": h.username,
-                            "password": h.password,
-                        },
-                    ]
-                    
-                    print('11111111111111',h.password)
-                    task_tuple = (('script', a),)
-                    hoc = AdHocRunner(hosts=assets)
-                    hoc.results_callback = CommandResultCallback()
-                    r = hoc.run(task_tuple)
-            
-                    data2['ip']=h.ip
-                    data2['data']=r['contacted'][h.hostname]['stdout']
-                    data1.append(data2)
-                except  Exception as  e:
-                    data2['ip'] = h.ip
-                    data2['data'] ="账号密码不对，请修改"
-                    data1.append(data2)
-            print(data1)
-            ret['data']=data1
-            
-            print(ret)
-            
-            return HttpResponse(json.dumps(ret))
         except Exception as e:
-            ret['status'] = False
-            ret['error'] = '账号或密码错误'
-            return HttpResponse(json.dumps(ret))
+               ret['status'] = False
+               ret['error'] = '未知错误 {}'.format(e)
+               return HttpResponse(json.dumps(ret))
 
         

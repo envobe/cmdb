@@ -15,10 +15,9 @@ Including another URLconf
 """
 
 from django.conf.urls import url
-from hostinfo.views import host, cmd, host_add, host_change, host_del,yml,history,hostupdate,host_change_password,hostall_del,host_show
+from hostinfo.views import host, cmd, host_add, host_change, host_del,history,hostupdate,host_change_password,hostall_del,host_show
 urlpatterns = [
     url(r'^host.html$', host,name="host"),
-    url(r'^yml.html$', yml,name="yml"),
     url(r'^cmd.html$', cmd,name="cmd"),
     url(r'^hostadd$', host_add,name="host_add"),
     url(r'^history.html$', history,name="history"),
