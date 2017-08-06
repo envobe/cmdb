@@ -174,8 +174,8 @@
 
 
 
-
                  $('#shell').click(function () {
+
                      $.ajax({
                          url: "/sh/shell.html",
                          type: 'POST',
@@ -192,11 +192,12 @@
                                     $("#pre").html(con);
                                 } else {
                                     $('#err').text(obj.error);
-                    }
+                                    }
 
                          }
 
-                     })
+                     });
+
                  });
 
 

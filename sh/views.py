@@ -1,7 +1,7 @@
 from  django.shortcuts import render, redirect, HttpResponse
 from sh.models import ToolsScript
 from hostinfo.models import Host,History
-import json
+import json,os
 from django.contrib.auth.decorators import permission_required, login_required
 
 
@@ -83,7 +83,7 @@ def shdelall(request):##批量删除
 
 
 @login_required(login_url="/login.html")
-def shell(request,nid):  ##执行脚本
+def shell(request,nid):  ##执行脚本页面
     if  request.method=="GET":
         obj = Host.objects.filter(id__gt=0)
         sh = ToolsScript.objects.filter(id=nid)
@@ -92,7 +92,7 @@ def shell(request,nid):  ##执行脚本
 
 
 @login_required(login_url="/login.html")
-def shell_sh(request):  ##执行脚本
+def shell_sh(request):  ##执行脚本-执行
     ret = {'status': True, 'data': None}
     
     if request.method == 'POST':
@@ -113,18 +113,21 @@ def shell_sh(request):  ##执行脚本
             
             for s in sh:
                 if s.tool_run_type == 'shell':
-                    with  open('sh/shell/{}.sh'.format(s.id), 'w+') as f:
+                    with  open('sh/shell/100000.sh'.format(s.id), 'w+') as f:
                         f.write(s.tool_script)
                         a = 'sh/shell/{}.sh'.format(s.id)
+                    os.system("sed 's/\r//'  sh/shell/100000.sh >  {}".format(a))
                 elif s.tool_run_type ==  'yml':
-                    with  open('sh/yml/{}.yml'.format(s.id), 'w+') as f:
+                    with  open('sh/yml/100000.yml'.format(s.id), 'w+') as f:
                         f.write(s.tool_script)
                         a = 'sh/yml/{}.yml'.format(s.id)
+                    os.system("sed 's/\r//'  sh/shell/100000.yml >  {}".format(a))
                 else:
                         ret['status'] = False
                         ret['error'] = '脚本类型错误,只能是shell  或  yml'
                         return HttpResponse(json.dumps(ret))
         
+
                 data1 = []
                 for h in host:
                     try:
@@ -159,11 +162,11 @@ def shell_sh(request):  ##执行脚本
                             data2['data'] = "脚本类型错误"
                     except  Exception as  e:
                         data2['ip'] = h.ip
-                        data2['data'] ="账号密码不对，请修改"
+                        data2['data'] ="账号密码不对，请修改 {}".format(e)
                         data1.append(data2)
+                        
                 ret['data'] = data1
                 return HttpResponse(json.dumps(ret))
-            
         except Exception as e:
                ret['status'] = False
                ret['error'] = '未知错误 {}'.format(e)
