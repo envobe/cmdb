@@ -5,9 +5,9 @@ import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
 
-# from  hostinfo.ansible_runner.runner import PlayBookRunner
-# from hostinfo.ansible_runner.callback import CommandResultCallback
-# from  hostinfo.ansible_runner.runner import AdHocRunner
+
+
+from  hostinfo.ansible_runner.runner import AdHocRunner
 
 
 @login_required(login_url="/login.html")
@@ -68,7 +68,7 @@ def host_add(request):  ##添加
 
 @login_required(login_url="/login.html")
 @permission_required('hostinfo.change_host', login_url='/error.html')
-def host_change(request):  ##修改
+def host_change(request):  ##编辑
     ret = {'status': True, 'error': None, 'data': None}
     if request.method == 'POST':
         try:
@@ -114,7 +114,7 @@ def host_change_password(request):  ##修改密码
 
 
 @login_required(login_url="/login.html")
-@permission_required('hostinfo.del_host', login_url='/error.html')
+@permission_required('hostinfo.delete_host', login_url='/error.html')
 def host_del(request):  ##删除
     ret = {'status': True, 'error': None, 'data': None}
     if request.method == 'POST':
@@ -144,7 +144,7 @@ def ssh(ip,port,username,password,cmd):
     except Exception as e:
         error = "账号或密码错误,请修改保存再执行命令"
         ret = {"ip": ip, "data": error}
-        return ret
+        return   ret
         
         
 
@@ -247,7 +247,7 @@ def hostupdate(request):  ## 更新
     
     
 @login_required(login_url="/login.html")
-@permission_required('hostinfo.del_host', login_url='/error.html')
+@permission_required('hostinfo.delete_host', login_url='/error.html')
 def hostall_del(request): ##批量删除
     ret = {'status': True, 'error': None, 'data': None}
     if  request.method == "POST":
@@ -258,16 +258,20 @@ def hostall_del(request): ##批量删除
     return HttpResponse(json.dumps(ret))
 
 @login_required(login_url="/login.html")
-
-def host_show(request,nid):
-    i = Host.objects.filter(id=nid).first()
-
-    cpu1 = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" top -bn 1 -i -c | grep Cpu   ")
-    cpu = float(cpu1['data'][8:14])
-
-    total = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" free | grep  Mem:  ")
-    list = total['data'].split(" ")
-    while ''  in list:
-        list.remove('')
-    mem = float('%.2f' %(int(list[2])/int(list[1])))
-    return render(request, 'host/show.html',{'cpu':cpu,'mem':mem})
+def host_show(request,nid):#性能展示
+    try:
+        i = Host.objects.filter(id=nid).first()
+        cpu1 = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" top -bn 1 -i -c | grep Cpu   ")
+        cpu = float(cpu1['data'][8:14])
+    
+        total = ssh(ip=i.ip, port=i.port, username=i.username, password=i.password, cmd=" free | grep  Mem:  ")
+        list = total['data'].split(" ")
+        while ''  in list:
+            list.remove('')
+        mem = float('%.2f' %(int(list[2])/int(list[1])))
+        return render(request, 'host/show.html',{'cpu':cpu,'mem':mem})
+    except Exception as e:
+        host = Host.objects.filter(id__gt=0)
+        jifang_list = Business.objects.all()
+        msg = "账号密码错误，请修改"
+        return render(request, 'host/host.html', {"host_list": host, "jifang_list": jifang_list,'msg':msg})

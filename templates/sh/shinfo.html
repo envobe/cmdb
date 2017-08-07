@@ -14,7 +14,7 @@
                         <a href="../index.html">首页</a>
                     </li>
                     <li>
-                        <a>详情</a>
+                        <a href="sh.html">详情</a>
                     </li>
                     <li class="active">
                         <strong>机柜</strong></li>
@@ -74,7 +74,9 @@
 
                               <div class="form-group"><label class="col-sm-2 control-label">脚本类型</label>
 
-                                <div class="col-lg-4 col-sm-6"><input type="text" class="form-control" name="tool_run_type"  value="{{ row.tool_run_type }}"  required="">
+                                <div class="col-lg-4 col-sm-6"><input type="text"  class="form-control" name="tool_run_type"    {% ifequal row.tool_run_type  0 %} value="shell"  {% endifequal %}
+                                            {% ifequal row.tool_run_type  1 %} python {% endifequal %}
+                                               {% ifequal row.tool_run_type  2 %} value="yml" {% endifequal %} required="">
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>

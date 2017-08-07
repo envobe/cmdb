@@ -6,12 +6,6 @@ import json
 @login_required(login_url="/login.html",)
 def jigui(request):  ##首页
     jigui = models.JiguiInfo.objects.filter(id__gt=0).order_by('-id')
-    
-    
-    print(type(jigui))
-    for i in jigui[0:3]:
-        print(i.zs)
-    
     return render(request, 'jigui/jigui.html', {"jigui_list": jigui,})
 
 

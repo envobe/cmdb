@@ -36,7 +36,7 @@ def logout(requset):   #退出
 
 
 @login_required(login_url="/login.html")
-def error(request):  ##首页
+def error(request):  ##错误页面
     return render(request, 'error.html')
 
 

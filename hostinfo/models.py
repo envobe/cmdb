@@ -48,7 +48,7 @@ class History(models.Model):
 
 class Business(models.Model):
     caption = models.CharField(max_length=32, verbose_name='机房', null=True)
-    code = models.CharField(max_length=32, null=True, default="SA", verbose_name='产品线', )
+    # code = models.CharField(max_length=32, null=True, default="SA", verbose_name='产品线', )
 
     class Meta:
         db_table = "Business"

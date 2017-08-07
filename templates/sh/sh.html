@@ -14,7 +14,7 @@
             <a href="../index.html">首页</a>
         </li>
         <li>
-            <a>详情</a>
+            <a href="sh.html">详情</a>
         </li>
         <li class="active">
             <strong>脚本</strong></li>
@@ -58,15 +58,15 @@
                         <div class="table-responsive">
 
 
-                            {% if    perms.jigui.add_jiguiinfo %}
+                            {% if    perms.sh.add_toolsscript %}
                                 <a type="button" class="btn btn-primary " href="{% url    'sh_add' %}">
-                                添加 {% endif %}
-                            </a>
-                            {% if  perms.jigui.delete_jiguiinfo %}
+                                添加
+                            </a>{% endif %}
+                                 {% if    perms.sh.delete_toolsscript %}
                                 <a class="btn btn-danger" data-toggle="modal"
                                    data-target="#myModa5">批量删除
                                 </a>
-                            {% endif %}
+                        {% endif %}
                             <form id="del_form_sh" class="form-horizontal">
 
 
@@ -91,19 +91,24 @@
 
                                             <td><input type="checkbox" value="{{ row.id }}" name="id"></td>
                                             <td><a href="/sh/shinfo-{{ row.id }}.html">{{ row.name }}</a></td>
-                                            <td>{{ row.tool_run_type }}</td>
+                                            <td>{% ifequal row.tool_run_type  0 %}shell {% endifequal %}
+                                            {% ifequal row.tool_run_type  1 %} python {% endifequal %}
+                                               {% ifequal row.tool_run_type  2 %} yml {% endifequal %}
+                                            </td>
                                             <td>{{ row.comment }}</td>
                                             <td>{{ row.utime }}</td>
                                             <td noWrap>
                                                 <a href="/sh/shinfo-{{ row.id }}.html" type="button"
                                                    class="btn btn-primary">
                                                     查看 </a>
+
+                                             {% if    perms.sh.change_toolsscript %}
                                                 <a href="/sh/shedit-{{ row.id }}.html" type="button"
-                                                   class="btn btn-primary">
-                                                    编辑 </a>
-                                                <a type="button" class="btn btn-danger  sh_del" data-toggle="modal"
+                                                   class="btn  btn-warning">
+                                                    编辑 </a> {% endif %}
+                                              {% if    perms.sh.delete_toolsscript %}        <a type="button" class="btn btn-danger  sh_del" data-toggle="modal"
                                                    data-target="#myModa6">
-                                                    删除 </a>
+                                                    删除 </a>           {% endif %}
                                               <a type="button" class="btn btn-primary "  href="shell-{{ row.id }}.html"
                                               >
                                                     执行 </a>
