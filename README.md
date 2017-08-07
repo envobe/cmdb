@@ -46,6 +46,10 @@ django-suit==2.0a1
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/4.png)
 ![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/5.png)
 
+后台
+
+![图片](https://github.com/hequan2017/cmdb/blob/master/static/img/6.png)
+
 
 历史
 
