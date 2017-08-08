@@ -100,8 +100,23 @@ def show(request):  ## 展示
     for i in name_id:
         name.append(i.name)
         jq.append(i.jq)
+    
+    ret = {'name': name, 'jq': jq}
+    
+    return render(request, 'jigui/show.html',{'name':name,'jq':jq})
 
-    return render(request, 'jigui/show.html',{"name":name,'jq':jq})
+
+@login_required(login_url="/login.html")
+def showapi(request):  ## 展示
+    name_id = models.JiguiInfo.objects.filter(id__gt=0)
+    name = []
+    jq = []
+    for i in name_id:
+        name.append(i.name)
+        jq.append(i.jq)
+    
+    ret={'name':name,'jq':jq}
+    return  HttpResponse(json.dumps(ret))
 
 @login_required(login_url="/login.html")
 @permission_required('jigui.delete_jiguiinfo',login_url='/error.html')

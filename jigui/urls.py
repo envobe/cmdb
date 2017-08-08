@@ -19,13 +19,14 @@ Including another URLconf
 from django.conf.urls import url,include
 
 
-from jigui.views import jigui, xiangxi, add, jigui_del,jigui_edit,show,delete_jigui
+from jigui.views import jigui, xiangxi, add, jigui_del,jigui_edit,show,delete_jigui,showapi
 
 
 urlpatterns = [
     url(r'^$',jigui,name='jigui'),
     url(r'^jigui.html$', jigui,name='jigui'),
-    url(r'^show.html$', show ,name='show'),
+    url(r'^show.html$',  show,name='show'),
+    url(r'^showapi$', showapi ,name='showapi'),
     url(r'^xiangxi-(?P<nid>\d+).html$', xiangxi,name='xiangxi'),
     url(r'^add.html$', add, name='addx'),
     url(r'^jigui-del.html$', delete_jigui),

@@ -71,34 +71,62 @@
 
     <script>
     $(function () {
+        var server_info;
 
         var myChart = echarts.init(document.getElementById('echarts-line'));
-
-        // 绘制图表
-
-        myChart.setOption({
-            title: {text: '机柜总数'},
+        var option = {
+            title: {
+                text: '机柜总数'
+            },
             tooltip: {},
+            legend: {
+                data:['总数']
+            },
             xAxis: {
-                data:{{ name | safe }}
-
+                data: {{ name  | safe }}
             },
             yAxis: {},
-
             series: [{
-                name: '总数',
+                name: '销量',
                 type: 'bar',
                 data: {{ jq | safe }}
             }]
-        });
+        };
+        myChart.setOption(option, true);
 
+{#        myChart.showLoading();#}
+        setInterval( function () {
 
-        window.onresize = function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/jigui/showapi',
+                    dataType: 'json',
+                    success: function (json) {
+                        server_info = eval(json);
+                    }
+                });
+
+                    option.xAxis.data =  server_info.name;
+                    option.series[0].data = server_info.jq;
+{#                    myChart.hideLoading();#}
+                    myChart.setOption(option, true);
+
+                }, 2000);
+
+         window.onresize = function () {
             myChart.resize();
-        }
-
+        };
     });
 
+
+
+
+
+
 </script>
+
+
+
+
 {% endblock %}
 
