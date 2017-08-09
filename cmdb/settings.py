@@ -37,8 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'jigui.apps.JiguiConfig',
     'index',
+    'jigui.apps.JiguiConfig',
     'hostinfo',
     'sh'
 ]
@@ -73,6 +73,8 @@ TEMPLATES = [
     },
 ]
 
+AUTH_USER_MODEL = 'index.UserProfile'
+
 WSGI_APPLICATION = 'cmdb.wsgi.application'
 
 # Database
@@ -102,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
