@@ -59,6 +59,7 @@ class Business(models.Model):
         return self.caption
 
 
+<<<<<<< HEAD
 # class Cpu(models.Model):
 #     # host = models.OneToOneField('Host')   一条记录
 #     server = models.ForeignKey('Host')
@@ -94,6 +95,27 @@ class Monitor(models.Model):
         verbose_name = '监控状态'
         verbose_name_plural = verbose_name
         # unique_together=("host","cpu_model")    联合唯一
+=======
+class Cpu(models.Model):
+    # host = models.OneToOneField('Host')   一条记录
+    server = models.ForeignKey('Host')
+    cpu_model = models.CharField(verbose_name='CPU型号',max_length=128,blank=True)
+    cpu_count = models.SmallIntegerField(verbose_name='物理CPU个数')
+    cpu_core_count = models.SmallIntegerField(verbose_name='CPU核心数')
+    memo = models.TextField(verbose_name='备注',null=True,blank=True)
+    create_date = models.DateTimeField(auto_now_add=True,verbose_name='创建时间')
+    update_date = models.DateTimeField(auto_now=True, null=True,verbose_name='更新时间')
+    
+    class Meta:
+        db_table='Cpu'
+        verbose_name='CPU部件'
+        verbose_name_plural=verbose_name
+        #unique_together=("host","cpu_model")    联合唯一
+
+    def __str__(self):
+        return self.cpu_model
+
+>>>>>>> origin/master
 
     def __str__(self):
         return self.cpu_use
