@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hostinfo.models import Host,History,Business
+from hostinfo.models import Host,History,Business,Monitor
 
 class HostAdmin(admin.ModelAdmin):
     search_fields = ('hostname','ip',) ## 定义搜索框以哪些字段可以搜索
@@ -15,3 +15,4 @@ class Historyinfo(admin.ModelAdmin):
 admin.site.register(Host,HostAdmin)
 admin.site.register(History,Historyinfo)
 admin.site.register(Business)
+admin.site.register(Monitor)

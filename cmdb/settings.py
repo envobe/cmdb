@@ -29,7 +29,7 @@ ALLOWED_HOSTS = ['*', ]
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django_crontab',
+    'django_crontab',
     'jigui.apps.SuitConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -141,7 +141,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 
 LOGIN_URL = '/login.html'
-#  计划任务
-# CRONJOBS = [
-#     ('* * * * *', 'cmdb.cron.my_scheduled_job', '> /tmp/123.log')
-# ]
+ #计划任务
+CRONJOBS = [
+    ('* * * * *', 'cmdb.cron.monitor_job', '> /tmp/1234.log')
+]

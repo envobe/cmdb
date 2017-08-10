@@ -59,6 +59,41 @@ class Business(models.Model):
         return self.caption
 
 
+# class Cpu(models.Model):
+#     # host = models.OneToOneField('Host')   一条记录
+#     server = models.ForeignKey('Host')
+#     cpu_model = models.CharField(verbose_name='CPU型号', max_length=128,null=True)
+#     cpu_count = models.SmallIntegerField(verbose_name='物理CPU个数',null=True)
+#     cpu_core_count = models.SmallIntegerField(verbose_name='CPU核心数',null=True)
+#     use = models.CharField(verbose_name='使用率',max_length=32,null=True)
+#     memo = models.TextField(verbose_name='备注', null=True,)
+#     create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+#     update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='更新时间')
+#
+#     class Meta:
+#         db_table = 'Cpu'
+#         verbose_name = 'CPU部件'
+#         verbose_name_plural = verbose_name
+#         # unique_together=("host","cpu_model")    联合唯一
+#
+#     def __str__(self):
+#         return self.cpu_model
 
 
+class Monitor(models.Model):
+    server = models.ForeignKey('Host')
+    cpu_use = models.CharField(verbose_name='CPU使用率',max_length=32,null=True)
+    mem_use = models.CharField(verbose_name='内存使用率', max_length=32, null=True)
+    # in_use = models.CharField(verbose_name='进流量', max_length=32, null=True)
+    # out_use = models.CharField(verbose_name='出流量', max_length=32, null=True)
 
+    create_date = models.DateTimeField(auto_now_add=True, verbose_name='创建时间')
+    update_date = models.DateTimeField(auto_now=True, null=True, verbose_name='更新时间')
+    class Meta:
+        db_table = 'Monitor'
+        verbose_name = '监控状态'
+        verbose_name_plural = verbose_name
+        # unique_together=("host","cpu_model")    联合唯一
+
+    def __str__(self):
+        return self.cpu_use

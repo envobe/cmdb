@@ -1,6 +1,7 @@
 from  django.shortcuts import render, redirect, HttpResponse
-from hostinfo.models import Host, History,Business
+from hostinfo.models import Host, History,Business,Monitor
 import json
+from datetime import datetime
 import paramiko
 from django.contrib.auth.decorators import permission_required, login_required
 
@@ -269,9 +270,43 @@ def host_show(request,nid):#性能展示
         while ''  in list:
             list.remove('')
         mem = float('%.2f' %(int(list[2])/int(list[1])))
-        return render(request, 'host/show.html',{'cpu':cpu,'mem':mem})
+        
+
+        all = Monitor.objects.all()
+        date = []
+        cpu_use = []
+        mem_use = []
+        for i in all:
+            if i.server_id == int(nid):
+                date.append(i.create_date.strftime("%m-%d %H:%M"))
+                cpu_use.append(i.cpu_use)
+                mem_use.append(i.mem_use)
+        print(mem_use)
+        return render(request, 'host/show.html',{'cpu':cpu,'mem':mem,"hostid":nid, 'date':date ,'cpu_use':cpu_use, 'mem_use':mem_use })
+    
     except Exception as e:
         host = Host.objects.filter(id__gt=0)
         jifang_list = Business.objects.all()
         msg = "账号密码错误，请修改"
-        return render(request, 'host/host.html', {"host_list": host, "jifang_list": jifang_list,'msg':msg})
+        return render(request, 'host/host.html', {"host_list": host, "jifang_list": jifang_list,'msg':msg,})
+
+@login_required(login_url="/login.html")
+def host_show_api(request):#性能展示api
+    if request.method == 'GET':
+        id = request.GET.get('id',None)
+        all = Monitor.objects.all()
+        date=[]
+        cpu_use=[]
+        mem_use=[]
+        for i in all:
+            if  i.server_id == int(id):
+                date.append(i.create_date.strftime("%m-%d %H:%M"))
+                cpu_use.append(i.cpu_use)
+                mem_use.append(i.mem_use)
+        ret = {'date':date ,'cpu_use':cpu_use,'mem_use':mem_use}
+        return HttpResponse(json.dumps(ret))
+    
+    
+    
+    
+    
